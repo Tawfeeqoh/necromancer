@@ -1,0 +1,8 @@
+{
+    "name": "legacy/billing-portal",
+    "description": "Legacy Customer Billing and Account Portal (abandoned circa 2013)",
+    "require": {
+        "php": ">=5.4.0 <7.0.0",
+        "swiftmailer/swiftmailer": "4.3.0"
+    }
+}
