@@ -1,6 +1,12 @@
-import type { Project, Upload, WorkflowStatus, Finding, RevivalTask, Dossier } from './types';
+import type { Project, Upload, WorkflowStatus, Finding, RevivalTask, Dossier, WorkspaceData, HealthInfo } from './types';
 
 const API_BASE = 'http://localhost:8000/api/v1';
+
+export async function getHealth(): Promise<HealthInfo> {
+  const res = await fetch(`${API_BASE}/health`);
+  if (!res.ok) throw new Error('Health check failed');
+  return res.json();
+}
 
 export async function createProject(name: string, description?: string): Promise<Project> {
   const res = await fetch(`${API_BASE}/projects`, {
@@ -71,4 +77,22 @@ export async function getDossier(projectId: string): Promise<Dossier> {
   const res = await fetch(`${API_BASE}/projects/${projectId}/dossier`);
   if (!res.ok) throw new Error('Failed to fetch dossier');
   return res.json();
+}
+
+export async function getWorkspace(projectId: string): Promise<WorkspaceData> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/workspace`);
+  if (!res.ok) throw new Error('Failed to fetch project workspace');
+  return res.json();
+}
+
+export async function rollbackProject(projectId: string): Promise<{ status: string; head_commit: string }> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/rollback`, {
+    method: 'POST',
+  });
+  if (!res.ok) throw new Error('Failed to rollback project');
+  return res.json();
+}
+
+export function getDossierDownloadUrl(projectId: string, format: 'json' | 'markdown'): string {
+  return `${API_BASE}/projects/${projectId}/dossier/download?format=${format}`;
 }

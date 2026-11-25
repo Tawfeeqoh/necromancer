@@ -1,9 +1,12 @@
 :root {
-  --bg-dark: #090a0f;
-  --bg-surface: #10121a;
-  --bg-surface-elevated: #161a24;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.16);
+  --bg-dark: #101113;
+  --bg-surface: #18191d;
+  --bg-surface-elevated: #272a2e;
+  --border-subtle: #272a2e;
+  --border-hover: rgba(181, 255, 91, 0.3);
+  --text-main: #e8e6df;
+  --text-muted: #666a70;
+  --accent-green: #b5ff5b;
   --accent-cyan: #06b6d4;
   --accent-emerald: #10b981;
   --accent-purple: #8b5cf6;
@@ -21,7 +24,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-dark);
-  color: #e2e8f0;
+  color: var(--text-main);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -32,9 +35,9 @@ code, pre {
 
 /* Custom utility styles */
 .badge-verified {
-  background-color: rgba(16, 185, 129, 0.12);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background-color: rgba(181, 255, 91, 0.12);
+  color: #b5ff5b;
+  border: 1px solid rgba(181, 255, 91, 0.3);
 }
 
 .badge-inferred {
@@ -61,8 +64,29 @@ code, pre {
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+.badge-medium {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
 .badge-info {
   background-color: rgba(6, 182, 212, 0.12);
   color: #38bdf8;
   border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary {
+  background-color: #b5ff5b;
+  color: #101113;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #a2f241;
+  box-shadow: 0 0 15px rgba(181, 255, 91, 0.3);
 }

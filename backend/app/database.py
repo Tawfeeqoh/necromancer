@@ -119,14 +119,29 @@ def init_db():
         project_id TEXT NOT NULL,
         task_id TEXT NOT NULL,
         base_revision TEXT NOT NULL,
+        result_revision TEXT,
         patch_storage_key TEXT NOT NULL,
         patch_sha256 TEXT NOT NULL,
         changed_files_json TEXT NOT NULL,
+        diff_text TEXT,
         status TEXT NOT NULL,
         created_at TEXT NOT NULL,
         applied_at TEXT,
         FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
         FOREIGN KEY (task_id) REFERENCES revival_tasks(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS dossiers (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        workflow_id TEXT NOT NULL,
+        original_sha256 TEXT NOT NULL,
+        revived_sha256 TEXT NOT NULL,
+        dossier_sha256 TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+        FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS test_runs (
@@ -187,6 +202,20 @@ def init_db():
     CREATE INDEX IF NOT EXISTS idx_test_runs_patch_id ON test_runs(patch_id);
     CREATE INDEX IF NOT EXISTS idx_audit_events_project ON audit_events(project_id, created_at);
     """)
+
+    # Safe incremental column migrations for existing SQLite databases
+    def _ensure_column(table: str, col: str, col_type: str):
+        existing = {r["name"] for r in cursor.execute(f"PRAGMA table_info({table})").fetchall()}
+        if col not in existing:
+            cursor.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
+
+    _ensure_column("patches", "result_revision", "TEXT")
+    _ensure_column("patches", "diff_text", "TEXT")
+    _ensure_column("workflows", "anatomy_json", "TEXT")
+    _ensure_column("workflows", "intent_json", "TEXT")
+    _ensure_column("workflows", "diagnosis_json", "TEXT")
+    _ensure_column("workflows", "goals_json", "TEXT")
+
     conn.commit()
     conn.close()
 

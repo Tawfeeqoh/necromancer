@@ -80,3 +80,71 @@ export interface Dossier {
   guardian_status: string;
   created_at: string;
 }
+
+export interface WorkspaceData {
+  project: Project;
+  upload: Upload | null;
+  workflow: WorkflowStatus | null;
+  anatomy: {
+    project_metrics?: {
+      primary_language?: string;
+      total_files?: number;
+      loc_estimate?: number;
+    };
+    entry_points?: string[];
+    schema_tables?: string[];
+    dependencies?: Record<string, any>;
+    analysis_method?: string;
+  } | null;
+  intent: {
+    primary_purpose?: string;
+    business_rules?: Array<{
+      title: string;
+      description: string;
+      evidence: string;
+      confidence: string;
+      status: string;
+    }>;
+    domain_concepts?: string[];
+  } | null;
+  diagnosis: {
+    breaking_changes?: any[];
+    security_vulnerabilities?: any[];
+    behavioral_drift?: any[];
+  } | null;
+  tasks: RevivalTask[];
+  patches: Array<{
+    id: string;
+    task_id: string;
+    base_revision: string;
+    result_revision?: string | null;
+    patch_sha256: string;
+    changed_files: string[];
+    diff: string;
+    status: string;
+    created_at: string;
+  }>;
+  test_runs: Array<{
+    id: string;
+    task_id: string;
+    command: string;
+    exit_code: number | null;
+    output: string;
+    status: string;
+    created_at: string;
+  }>;
+  guardian_reviews: Array<{
+    id: string;
+    task_id: string;
+    status: string;
+    findings: string[];
+    created_at: string;
+  }>;
+}
+
+export interface HealthInfo {
+  status: string;
+  version: string;
+  sandbox_available: boolean;
+  sandbox_type: string;
+}

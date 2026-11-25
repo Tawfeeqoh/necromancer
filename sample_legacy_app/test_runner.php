@@ -62,7 +62,8 @@ if (function_exists('authenticate_user')) {
     $john = authenticate_user('john_doe', 'secretpass');
     assert_test("Suspended user account is locked / denied access", (is_array($john) && isset($john['error']) && $john['error'] === 'ACCOUNT_SUSPENDED') || $john === false);
 } else {
-    echo "[INFO] Running in unmodernized legacy state; modernized authentication functions not yet applied.\n";
+    $legacy_admin = function_exists('login_user') ? login_user('admin', 'password123') : false;
+    assert_test("Legacy authentication succeeds for valid user", is_array($legacy_admin) && ($legacy_admin['username'] ?? '') === 'admin');
 }
 
 echo "=== Test Summary: Total={$total_tests}, Failures={$failures} ===\n";
